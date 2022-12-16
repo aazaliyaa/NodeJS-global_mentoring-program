@@ -1,0 +1,19 @@
+{
+  "name": "nodejs-global-mentoring-program",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aazaliyaa/NodeJS-global_mentoring-program.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aazaliyaa/NodeJS-global_mentoring-program/issues"
+  },
+  "homepage": "https://github.com/aazaliyaa/NodeJS-global_mentoring-program#readme"
+}
