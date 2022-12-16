@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/aazaliyaa/NodeJS-global_mentoring-program/issues"
   },
-  "homepage": "https://github.com/aazaliyaa/NodeJS-global_mentoring-program#readme"
+  "homepage": "https://github.com/aazaliyaa/NodeJS-global_mentoring-program#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
