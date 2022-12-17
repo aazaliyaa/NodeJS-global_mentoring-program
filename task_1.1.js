@@ -1,5 +1,5 @@
 process.stdin.on("data", (data) => {
-  arr = data.toString().split("");
-  data = arr.reverse().join("");
-  process.stdout.write(data + "\n\n");
+  const arr = data.toString().split("");
+  const reverseData = arr.reverse().join("");
+  process.stdout.write(reverseData + "\n\n");
 });
