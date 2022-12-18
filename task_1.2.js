@@ -1,5 +1,5 @@
-const csvtojson = require("csvtojson");
-const fs = require("fs");
+import csvtojson from "csvtojson";
+import fs from "fs";
 
 const rStream = fs.createReadStream("./csv/data.csv");
 const wStream = fs.createWriteStream("./data.txt", "utf8");
