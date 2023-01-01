@@ -1,44 +1,63 @@
 import { Router } from 'express';
+import Joi from 'joi';
 
 const router = Router();
 
 const data = [
   {
-    id: 1,
+    id: "1",
     login: 'werful@mail.ru',
     password: 'dgghfg',
     age: 34,
     isDeleted: false,
   },
   {
-    id: 2,
+    id: "2",
     login: 'aswerty@mail.ru',
     password: 'hyujki',
     age: 42,
     isDeleted: false,
   },
   {
-    id: 3,
+    id: "3",
     login: 'qazdafju@inbox.ru',
     password: 'sdujvki',
     age: 16,
     isDeleted: false,
   },
   {
-    id: 4,
+    id: "4",
     login: 'serjosa@mail.ru',
     password: 'xsdcfgh',
     age: 28,
     isDeleted: false,
   },
   {
-    id: 5,
+    id: "5",
     login: 'jutyilo@inbox.ru',
     password: 'cdfvgrrsd',
     age: 31,
     isDeleted: false,
   },
 ];
+
+const schema = Joi.object({
+        id: Joi.string()
+            .required(),
+        login: Joi.string()
+            .email({ tlds: { allow: false } })
+            .required(),
+        password: Joi.string()
+            .pattern(new RegExp('[a-zA-Z][0-9]|[0-9][a-zA-Z]'))
+            .required(),
+        age: Joi.number()
+            .integer()
+            .min(4)
+            .max(130)
+            .required(),
+        isDeleted: Joi.boolean()
+            .required(),
+})
 
 // READ
 router.get('/', (req, res) => {
@@ -47,7 +66,7 @@ router.get('/', (req, res) => {
 
 // READ
 router.get('/:id', (req, res) => {
-  const foundUser = data.find((item) => item.id === parseInt(req.params.id));
+  const foundUser = data.find((item) => item.id === req.params.id);
   if (foundUser) {
     res.status(200).json(foundUser);
   } else {
@@ -60,25 +79,32 @@ router.post('/', (req, res) => {
   const newId = data.length + 1;
 
   const newItem = {
-    id: newId,
+    id: newId.toString(),
     login: req.body.login,
     password: req.body.password,
     age: req.body.age,
     isDeleted: false,
   };
 
-  data.push(newItem);
 
-  res.status(201).json(newItem);
+  const { error, value } = schema.validate(newItem, {
+    abortEarly: false,
+  });
+  if (error) {
+      return res.status(400).send("Invalid Request: " + JSON.stringify(error));
+  } else {
+      data.push(newItem);
+      return res.send("Successfuly created user: " + JSON.stringify(value));
+  }
 });
 
 // UPDATE
 router.put('/:id', (req, res) => {
-  const foundUser = data.find((item) => item.id === parseInt(req.params.id, 10));
+  const foundUser = data.find((item) => item.id === req.params.id);
 
   if (foundUser) {
     const updated = {
-      id: foundUser.id,
+      id: foundUser.id.toString(),
       login: req.body.login,
       password: req.body.password,
       age: req.body.age,
@@ -87,9 +113,16 @@ router.put('/:id', (req, res) => {
 
     const targetIndex = data.indexOf(foundUser);
 
-    data.splice(targetIndex, 1, updated);
-
-    res.sendStatus(204);
+    const { error, value } = schema.validate(updated, {
+        abortEarly: false,
+    });
+    if (error) {
+        return res.status(400).send("Invalid Request: " + JSON.stringify(error));
+    } else {
+        data.splice(targetIndex, 1, updated);
+        return res.send("Successfuly updated user: " + JSON.stringify(value));
+    }
+    
   } else {
     res.sendStatus(404);
   }
@@ -97,7 +130,7 @@ router.put('/:id', (req, res) => {
 
 // DELETE
 router.delete('/:id', (req, res) => {
-  const foundUser = data.find((item) => item.id === parseInt(req.params.id, 10));
+  const foundUser = data.find((item) => item.id === req.params.id);
 
   if (foundUser) {
     const updated = {
@@ -117,5 +150,6 @@ router.delete('/:id', (req, res) => {
     res.sendStatus(404);
   }
 });
+
 
 export default router;
