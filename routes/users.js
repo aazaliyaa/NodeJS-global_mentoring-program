@@ -1,54 +1,53 @@
-import { Router } from "express";
+import { Router } from 'express';
+
 const router = Router();
 
-let data = [
+const data = [
   {
     id: 1,
-    login: "werful@mail.ru",
-    password: "dgghfg",
+    login: 'werful@mail.ru',
+    password: 'dgghfg',
     age: 34,
     isDeleted: false,
   },
   {
     id: 2,
-    login: "aswerty@mail.ru",
-    password: "hyujki",
+    login: 'aswerty@mail.ru',
+    password: 'hyujki',
     age: 42,
     isDeleted: false,
   },
   {
     id: 3,
-    login: "qazdafju@inbox.ru",
-    password: "sdujvki",
+    login: 'qazdafju@inbox.ru',
+    password: 'sdujvki',
     age: 16,
     isDeleted: false,
   },
   {
     id: 4,
-    login: "serjosa@mail.ru",
-    password: "xsdcfgh",
+    login: 'serjosa@mail.ru',
+    password: 'xsdcfgh',
     age: 28,
     isDeleted: false,
   },
   {
     id: 5,
-    login: "jutyilo@inbox.ru",
-    password: "cdfvgrrsd",
+    login: 'jutyilo@inbox.ru',
+    password: 'cdfvgrrsd',
     age: 31,
     isDeleted: false,
   },
 ];
 
 // READ
-router.get("/", function (req, res) {
+router.get('/', (req, res) => {
   res.status(200).json(data);
 });
 
 // READ
-router.get("/:id", function (req, res) {
-  let foundUser = data.find(function (item) {
-    return item.id === parseInt(req.params.id);
-  });
+router.get('/:id', (req, res) => {
+  const foundUser = data.find((item) => item.id === parseInt(req.params.id));
   if (foundUser) {
     res.status(200).json(foundUser);
   } else {
@@ -57,10 +56,10 @@ router.get("/:id", function (req, res) {
 });
 
 // CREATE
-router.post("/", function (req, res) {
-  let newId = data.length + 1;
+router.post('/', (req, res) => {
+  const newId = data.length + 1;
 
-  let newItem = {
+  const newItem = {
     id: newId,
     login: req.body.login,
     password: req.body.password,
@@ -74,13 +73,11 @@ router.post("/", function (req, res) {
 });
 
 // UPDATE
-router.put("/:id", function (req, res) {
-  let foundUser = data.find(function (item) {
-    return item.id === parseInt(req.params.id);
-  });
+router.put('/:id', (req, res) => {
+  const foundUser = data.find((item) => item.id === parseInt(req.params.id, 10));
 
   if (foundUser) {
-    let updated = {
+    const updated = {
       id: foundUser.id,
       login: req.body.login,
       password: req.body.password,
@@ -88,7 +85,7 @@ router.put("/:id", function (req, res) {
       isDeleted: false,
     };
 
-    let targetIndex = data.indexOf(foundUser);
+    const targetIndex = data.indexOf(foundUser);
 
     data.splice(targetIndex, 1, updated);
 
@@ -99,13 +96,11 @@ router.put("/:id", function (req, res) {
 });
 
 // DELETE
-router.delete("/:id", function (req, res) {
-  let foundUser = data.find(function (item) {
-    return item.id === parseInt(req.params.id);
-  });
+router.delete('/:id', (req, res) => {
+  const foundUser = data.find((item) => item.id === parseInt(req.params.id, 10));
 
   if (foundUser) {
-    let updated = {
+    const updated = {
       id: foundUser.id,
       login: foundUser.login,
       password: foundUser.password,
@@ -113,7 +108,7 @@ router.delete("/:id", function (req, res) {
       isDeleted: true,
     };
 
-    let targetIndex = data.indexOf(foundUser);
+    const targetIndex = data.indexOf(foundUser);
 
     data.splice(targetIndex, 1, updated);
 
