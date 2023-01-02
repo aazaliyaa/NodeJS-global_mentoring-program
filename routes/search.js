@@ -1,6 +1,11 @@
 import { Router } from 'express';
+import { fileURLToPath } from 'url'
+import path, { dirname } from 'path';
 
 const router = Router();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const data = [
   {
@@ -41,8 +46,8 @@ const data = [
 ];
 
 // Browse users
-router.get('/', (req, res) => {
-    res.send('SEARCH!');
+router.get('/', (req, res, next) => {
+    res.sendFile(path.join(__dirname + '/../index.html'));
 });
 
 export default router;
