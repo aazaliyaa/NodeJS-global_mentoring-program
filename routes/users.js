@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {
-  createUser, updateUser, findUserById, getAllUsers, deleteUser,
+  createUser, updateUser, findUserById, getAllUsers, deleteUser, deleteAll,
 } from '../controllers/users.controller.js';
 
 const router = Router();
@@ -17,7 +17,10 @@ router.post('/', createUser);
 // UPDATE
 router.put('/:id', updateUser);
 
-// DELETE
+// SOFT DELETE USER
 router.delete('/:id', deleteUser);
+
+// DELETE ALL
+router.delete('/', deleteAll);
 
 export default router;

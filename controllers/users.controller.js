@@ -19,9 +19,7 @@ const schema = Joi.object({
     .required(),
 });
 
-// Create and Save a new user
 export function createUser(req, res) {
-  // Create a User
   const newUser = {
     login: req.body.login,
     password: req.body.password,
@@ -33,23 +31,21 @@ export function createUser(req, res) {
     abortEarly: false,
   });
   if (error) {
-    return res.status(400).send(`Invalid Request: ${JSON.stringify(error)}`);
-  }
-  // Save user in the database
-  Users.create(newUser)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the user.',
+    res.status(400).send(`Invalid Request: ${JSON.stringify(error)}`);
+  } else {
+    Users.create(value)
+      .then((data) => {
+        res.send(`Successfuly created user: ${JSON.stringify(data)}`);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message:
+      err.message || 'Some error occurred while creating the user.',
+        });
       });
-    });
-  return res.send(`Successfuly created user: ${JSON.stringify(value)}`);
+  }
 }
 
-// Retrieve all Users from the database.
 export function getAllUsers(req, res) {
   Users.findAll()
     .then((data) => {
@@ -63,7 +59,6 @@ export function getAllUsers(req, res) {
     });
 }
 
-// Find a single User with an id
 export function findUserById(req, res) {
   const { id } = req.params;
 
@@ -77,46 +72,42 @@ export function findUserById(req, res) {
         });
       }
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         message: `Error retrieving user with id=${id}`,
       });
     });
 }
 
-// Update a User by the id in the request
 export function updateUser(req, res) {
   const { id } = req.params;
+  const updated = {
+    login: req.body.login,
+    password: req.body.password,
+    age: req.body.age,
+    isDeleted: false,
+  };
 
-  const { error, value } = schema.validate(req.body, {
+  const { error, value } = schema.validate(updated, {
     abortEarly: false,
   });
   if (error) {
     res.status(400).send(`Invalid Request: ${JSON.stringify(error)}`);
-  }
-  Users.update(req.body, {
-    where: { id },
-  })
-    .then((num) => {
-      if (num === 1) {
-        res.send({
-          message: 'User was updated successfully.',
-        });
-      } else {
-        res.send({
-          message: `Cannot update user with id=${id}. Maybe user was not found or req.body is empty!`,
-        });
-      }
+  } else {
+    Users.update(value, {
+      where: { id },
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: `Error updating user with id=${id}`,
+      .then(() => {
+        res.send(`Successfuly updated user: ${JSON.stringify(value)}`);
+      })
+      .catch(() => {
+        res.status(500).send({
+          message: `Error updating user with id=${id}`,
+        });
       });
-    });
-  res.send(`Successfuly updated user: ${JSON.stringify(value)}`);
+  }
 }
 
-// Soft delete a User with the specified id in the request
 export function deleteUser(req, res) {
   const { id } = req.params;
   let updated = {};
@@ -130,35 +121,45 @@ export function deleteUser(req, res) {
           age: data.age,
           isDeleted: true,
         };
+
+        Users.update(updated, {
+          where: { id },
+        })
+          .then(() => {
+            res.send({
+              message: 'User was soft deleted successfully.',
+            });
+          })
+          .catch(() => {
+            res.status(500).send({
+              message: `Error deleting user with id=${id}`,
+            });
+          });
       } else {
         res.status(404).send({
           message: `Cannot find user with id=${id}.`,
         });
       }
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({
         message: `Error retrieving user with id=${id}`,
       });
     });
+}
 
-  Users.update(updated, {
-    where: { id },
+export function deleteAll(req, res) {
+  Users.destroy({
+    where: {},
+    truncate: false,
   })
-    .then((num) => {
-      if (num === 1) {
-        res.send({
-          message: 'User was soft deleted successfully.',
-        });
-      } else {
-        res.send({
-          message: `Cannot delete user with id=${id}.`,
-        });
-      }
+    .then((nums) => {
+      res.send({ message: `${nums} Users were deleted successfully!` });
     })
     .catch((err) => {
       res.status(500).send({
-        message: `Error deleting user with id=${id}`,
+        message:
+            err.message || 'Some error occurred while removing all users.',
       });
     });
 }
