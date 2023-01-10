@@ -13,28 +13,28 @@ const data = [
   },
   {
     id: '2',
-    login: 'aswerty@mail.ru',
+    login: 'sdfdfty@mail.ru',
     password: 'hyujki',
     age: 42,
     isDeleted: false,
   },
   {
     id: '3',
-    login: 'qazdafju@inbox.ru',
+    login: 'werydafju@inbox.ru',
     password: 'sdujvki',
     age: 16,
     isDeleted: false,
   },
   {
     id: '4',
-    login: 'serjosa@mail.ru',
+    login: 'wrutrjosa@mail.ru',
     password: 'xsdcfgh',
     age: 28,
     isDeleted: false,
   },
   {
     id: '5',
-    login: 'jutyilo@inbox.ru',
+    login: 'weryilo@inbox.ru',
     password: 'cdfvgrrsd',
     age: 31,
     isDeleted: false,
@@ -60,8 +60,29 @@ const schema = Joi.object({
 });
 
 // READ
+// http://localhost:3000/users?loginSubstring=wer&limit=2  for getAutoSuggestUsers
 router.get('/', (req, res) => {
-  res.status(200).json(data);
+  const getAutoSuggestUsers = (loginSubstring, limit) => {
+    const arr = data.reduce((accumulator, user) => {
+      const loginSub = user.login.split('').slice(0, loginSubstring.length).join('');
+
+      if (loginSubstring === loginSub) {
+        accumulator.push(user);
+      }
+
+      return accumulator;
+    }, []);
+
+    return arr.slice(0, limit - 1);
+  };
+
+  if (req.query.loginSubstring && req.query.limit) {
+    const matchedUsers = getAutoSuggestUsers(req.query.loginSubstring, req.query.limit);
+
+    res.status(200).json(matchedUsers);
+  } else {
+    res.status(200).json(data);
+  }
 });
 
 // READ
