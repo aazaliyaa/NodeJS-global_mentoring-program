@@ -1,35 +1,11 @@
-import Joi from 'joi';
 import db from '../models/index.js';
+import UserService from '../services/users.service.js';
 
 const Users = db.users;
 
-const schema = Joi.object({
-  login: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required(),
-  password: Joi.string()
-    .pattern(/[a-zA-Z][0-9]|[0-9][a-zA-Z]/)
-    .required(),
-  age: Joi.number()
-    .integer()
-    .min(4)
-    .max(130)
-    .required(),
-  isDeleted: Joi.boolean()
-    .required(),
-});
-
 export function createUser(req, res) {
-  const newUser = {
-    login: req.body.login,
-    password: req.body.password,
-    age: req.body.age,
-    isDeleted: false,
-  };
+  const { error, value } = UserService.createUser(req.body);
 
-  const { error, value } = schema.validate(newUser, {
-    abortEarly: false,
-  });
   if (error) {
     res.status(400).send(`Invalid Request: ${JSON.stringify(error)}`);
   } else {
@@ -81,16 +57,8 @@ export function findUserById(req, res) {
 
 export function updateUser(req, res) {
   const { id } = req.params;
-  const updated = {
-    login: req.body.login,
-    password: req.body.password,
-    age: req.body.age,
-    isDeleted: false,
-  };
+  const { error, value } = UserService.createUser(req.body);
 
-  const { error, value } = schema.validate(updated, {
-    abortEarly: false,
-  });
   if (error) {
     res.status(400).send(`Invalid Request: ${JSON.stringify(error)}`);
   } else {
@@ -110,19 +78,13 @@ export function updateUser(req, res) {
 
 export function deleteUser(req, res) {
   const { id } = req.params;
-  let updated = {};
 
   Users.findByPk(id)
-    .then((data) => {
-      if (data) {
-        updated = {
-          login: data.login,
-          password: data.password,
-          age: data.age,
-          isDeleted: true,
-        };
+    .then((user) => {
+      if (user) {
+        const deletedUser = UserService.deleteUser(user);
 
-        Users.update(updated, {
+        Users.update(deletedUser, {
           where: { id },
         })
           .then(() => {
