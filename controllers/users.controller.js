@@ -1,7 +1,5 @@
-import db from '../models/index.js';
 import UserService from '../services/users.service.js';
-
-const Users = db.users;
+import UsersDataAccess from '../dal/dal.users.js';
 
 export function createUser(req, res) {
   const { error, value } = UserService.createUser(req.body);
@@ -9,7 +7,7 @@ export function createUser(req, res) {
   if (error) {
     res.status(400).send(`Invalid Request: ${JSON.stringify(error)}`);
   } else {
-    Users.create(value)
+    UsersDataAccess.createUser(value)
       .then((data) => {
         res.send(`Successfuly created user: ${JSON.stringify(data)}`);
       })
@@ -23,7 +21,7 @@ export function createUser(req, res) {
 }
 
 export function getAllUsers(req, res) {
-  Users.findAll()
+  UsersDataAccess.getAllUsers()
     .then((data) => {
       res.send(data);
     })
@@ -38,7 +36,7 @@ export function getAllUsers(req, res) {
 export function findUserById(req, res) {
   const { id } = req.params;
 
-  Users.findByPk(id)
+  UsersDataAccess.findUserByPk(id)
     .then((data) => {
       if (data) {
         res.send(data);
@@ -62,9 +60,7 @@ export function updateUser(req, res) {
   if (error) {
     res.status(400).send(`Invalid Request: ${JSON.stringify(error)}`);
   } else {
-    Users.update(value, {
-      where: { id },
-    })
+    UsersDataAccess.updateUser(value, id)
       .then(() => {
         res.send(`Successfuly updated user: ${JSON.stringify(value)}`);
       })
@@ -79,14 +75,12 @@ export function updateUser(req, res) {
 export function deleteUser(req, res) {
   const { id } = req.params;
 
-  Users.findByPk(id)
+  UsersDataAccess.findUserByPk(id)
     .then((user) => {
       if (user) {
         const deletedUser = UserService.deleteUser(user);
 
-        Users.update(deletedUser, {
-          where: { id },
-        })
+        UsersDataAccess.updateUser(deletedUser, id)
           .then(() => {
             res.send({
               message: 'User was soft deleted successfully.',
@@ -111,10 +105,7 @@ export function deleteUser(req, res) {
 }
 
 export function deleteAll(req, res) {
-  Users.destroy({
-    where: {},
-    truncate: false,
-  })
+  UsersDataAccess.deleteAllUsers()
     .then((nums) => {
       res.send({ message: `${nums} Users were deleted successfully!` });
     })
