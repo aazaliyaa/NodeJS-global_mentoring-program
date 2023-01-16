@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import {
-  DB, USER, PASSWORD, HOST, dialect as _dialect, pool as _pool,
+  DB, USER, PASSWORD, HOST, dialect as _dialect, pool as _pool, predefinedUsers,
 } from '../config/db.config.js';
 import usersModel from './users.model.js';
 
@@ -23,5 +23,14 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.users = usersModel(sequelize, Sequelize);
+
+db.users.destroy({
+  where: {},
+  truncate: false,
+});
+predefinedUsers.forEach(async (user) => {
+  await db.users.create(user);
+  console.log('predefined user was added to the database');
+});
 
 export default db;
