@@ -24,12 +24,11 @@ db.sequelize = sequelize;
 
 db.users = usersModel(sequelize, Sequelize);
 
-db.users.destroy({
-  where: {},
-  truncate: false,
-});
 predefinedUsers.forEach(async (user) => {
-  await db.users.create(user);
+  await db.users.findOrCreate({
+    where: { login: user.login },
+    defaults: user,
+  });
   console.log('predefined user was added to the database');
 });
 
