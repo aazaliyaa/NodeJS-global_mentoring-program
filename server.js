@@ -2,7 +2,8 @@ import { createServer } from 'http';
 import express, { json } from 'express';
 import usersRouter from './routes/users.js';
 import groupsRouter from './routes/groups.js';
-import db from './models/index.js';
+import junctionRouter from './routes/junction.js';
+import db, { addPredefinedDatatoDB } from './models/index.js';
 
 const app = express();
 app.use(json());
@@ -10,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/users', usersRouter);
 app.use('/groups', groupsRouter);
+app.use('/junction', junctionRouter);
 
 app.use('/', (req, res) => {
   res.send('Application works!');
@@ -17,6 +19,7 @@ app.use('/', (req, res) => {
 
 db.sequelize.sync()
   .then(() => {
+    addPredefinedDatatoDB();
     console.log('Synced db.');
   })
   .catch((err) => {

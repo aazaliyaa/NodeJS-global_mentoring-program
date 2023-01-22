@@ -4,6 +4,7 @@ import {
 } from '../config/db.config.js';
 import usersModel from './users.model.js';
 import groupsModel from './groups.model.js';
+import userGroupModel from './junction.model.js';
 
 const sequelize = new Sequelize(DB, USER, PASSWORD, {
   host: HOST,
@@ -23,26 +24,24 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.groups = groupsModel(sequelize, Sequelize);
+db.groups = groupsModel(sequelize);
+db.users = usersModel(sequelize);
+db.userGroups = userGroupModel(sequelize, db.users, db.groups);
 
-db.users = usersModel(sequelize, Sequelize);
-
-await sequelize.sync({ force: true });
-
-predefinedUsers.forEach(async (user) => {
-  await db.users.findOrCreate({
-    where: { login: user.login },
-    defaults: user,
+export const addPredefinedDatatoDB = () => {
+  predefinedUsers.forEach(async (user) => {
+    await db.users.findOrCreate({
+      where: { login: user.login },
+      defaults: user,
+    });
   });
-  console.log('predefined user was added to the database');
-});
 
-predefinedGroups.forEach(async (group) => {
-  await db.groups.findOrCreate({
-    where: { name: group.name },
-    defaults: group,
+  predefinedGroups.forEach(async (group) => {
+    await db.groups.findOrCreate({
+      where: { name: group.name },
+      defaults: group,
+    });
   });
-  console.log('predefined group was added to the database');
-});
+};
 
 export default db;

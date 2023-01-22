@@ -33,11 +33,15 @@ export const predefinedUsers = [
 
 export const predefinedGroups = [
   {
-    name: 'wertyy',
+    name: 'group_one',
     permissions: ['READ', 'WRITE', 'DELETE'],
   },
   {
-    name: 'assuuio',
+    name: 'group_two',
     permissions: ['READ', 'WRITE', 'DELETE', 'UPLOAD_FILES'],
+  },
+  {
+    name: 'group_three',
+    permissions: ['READ', 'WRITE', 'DELETE', 'SHARE', 'UPLOAD_FILES'],
   },
 ];
