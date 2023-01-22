@@ -30,3 +30,14 @@ export const predefinedUsers = [
     isDeleted: false,
   },
 ];
+
+export const predefinedGroups = [
+  {
+    name: 'wertyy',
+    permissions: ['READ', 'WRITE', 'DELETE'],
+  },
+  {
+    name: 'assuuio',
+    permissions: ['READ', 'WRITE', 'DELETE', 'UPLOAD_FILES'],
+  },
+];
