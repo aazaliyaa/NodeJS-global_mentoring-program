@@ -1,8 +1,8 @@
 import { createServer } from 'http';
 import express, { json } from 'express';
-import usersRouter from './routes/users.js';
-import groupsRouter from './routes/groups.js';
-import junctionRouter from './routes/junction.js';
+import usersRouter from './routes/users.route.js';
+import groupsRouter from './routes/groups.route.js';
+import junctionRouter from './routes/junction.route.js';
 import db, { addPredefinedDatatoDB } from './models/index.js';
 
 const app = express();

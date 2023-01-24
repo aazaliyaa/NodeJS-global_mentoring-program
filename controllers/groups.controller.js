@@ -1,5 +1,5 @@
 import GroupService from '../services/groups.service.js';
-import GroupsDataAccess from '../dal/dal.groups.js';
+import GroupsDataAccess from '../dal/groups.dal.js';
 
 export function createGroup(req, res) {
   const value = GroupService.createGroup(req.body);

@@ -1,4 +1,4 @@
-import UserGroupDataAccess from '../dal/dal.junction.js';
+import UserGroupDataAccess from '../dal/junction.dal.js';
 
 export default function createJunction(req, res) {
   UserGroupDataAccess.createUserGroup(req.body)

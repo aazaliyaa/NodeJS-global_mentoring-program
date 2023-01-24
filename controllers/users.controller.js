@@ -1,5 +1,5 @@
 import UserService from '../services/users.service.js';
-import UsersDataAccess from '../dal/dal.users.js';
+import UsersDataAccess from '../dal/users.dal.js';
 
 export function createUser(req, res) {
   const { error, value } = UserService.createUser(req.body);
