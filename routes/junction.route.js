@@ -4,7 +4,7 @@ import createJunction from '../controllers/junction.controller.js';
 import UserGroupDataAccess from '../dal/junction.dal.js';
 
 const router = Router();
-const t = await db.sequelize.transaction({ autocommit: false });
+const t = await db.sequelize.transaction();
 
 // CREATE
 router.post('/', createJunction);
@@ -18,14 +18,10 @@ router.get('/', (req, res) => {
     };
     const ifUserGroupExists = await UserGroupDataAccess.findUserGroup(junction);
     if (ifUserGroupExists == null) {
-      try {
+      await db.sequelize.transaction(async () => {
         await UserGroupDataAccess.createUserGroup(junction, { transaction: t });
-        await t.commit();
-        res.send('Junction successfuly created');
-      } catch (error) {
-        await t.rollback();
-        res.send('error occured');
-      }
+      });
+      res.send('junction was created');
     } else {
       res.send('UserGroup already exists');
     }
