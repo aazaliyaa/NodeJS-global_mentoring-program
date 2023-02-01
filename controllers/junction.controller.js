@@ -16,20 +16,36 @@ export function createJunction(req, res) {
     });
 }
 
-export async function addUsersToGroup(req, res) {
+export function addUsersToGroup(req, res) {
   if (req.query.groupId && req.query.userIds) {
     const junction = {
       groupId: req.query.groupId,
       userId: req.query.userIds,
     };
-    const ifUserGroupExists = await UserGroupDataAccess.findUserGroup(junction);
-    if (ifUserGroupExists == null) {
-      await db.sequelize.transaction(async () => {
-        await UserGroupDataAccess.createUserGroup(junction, { transaction: t });
+    UserGroupDataAccess.findUserGroup(junction)
+      .then((data) => {
+        if (data == null) {
+          db.sequelize.transaction(() => {
+            UserGroupDataAccess.createUserGroup(junction, { transaction: t })
+              .then((userGroup) => {
+                res.send(`Successfuly created junction: ${JSON.stringify(userGroup)}`);
+              })
+              .catch((err) => {
+                res.status(500).send({
+                  message:
+              err.message || 'Some error occurred while creating the junction.',
+                });
+              });
+          });
+        } else {
+          res.send('UserGroup already exists');
+        }
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message:
+          err.message || 'Some error occurred while finding UserGroup.',
+        });
       });
-      res.send('junction was created');
-    } else {
-      res.send('UserGroup already exists');
-    }
   }
 }
