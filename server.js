@@ -4,6 +4,7 @@ import usersRouter from './routes/users.route.js';
 import groupsRouter from './routes/groups.route.js';
 import junctionRouter from './routes/junction.route.js';
 import db, { addPredefinedDatatoDB } from './models/index.js';
+import logger from './logger.js';
 
 const app = express();
 app.use(json());
@@ -15,6 +16,7 @@ app.use('/junction', junctionRouter);
 
 app.use('/', (req, res) => {
   res.send('Application works!');
+  logger.debug(`req.method ${req.method}`);
 });
 
 db.sequelize.sync()
