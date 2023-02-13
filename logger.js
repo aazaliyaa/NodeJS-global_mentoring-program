@@ -8,7 +8,19 @@ const logger = createLogger({
       format.colorize(),
       format.simple(),
     ),
+  }),
+  new transports.File({
+    filename: './logs/errors.log',
+    handleExceptions: true,
+    handleRejections: true,
   })],
+  handleExceptions: true,
+  handleRejections: true,
+  humanReadableUnhandledException: true,
+  json: false,
+  colorize: true,
+  timestamp: true,
+  exitOnError: true,
 });
 
 export default logger;
