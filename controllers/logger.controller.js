@@ -3,9 +3,11 @@ import logger from '../logger.js';
 
 export function logServiceMethodAndArgs(req, res) {
   if (Object.keys(req.query).length !== 0) {
-    logger.debug(`req.method ${req.method}, args: ${JSON.stringify(req.query)}`);
+    logger.debug(
+      `Method name: ${req.method}, arguments: ${JSON.stringify(req.query)}`,
+    );
   } else {
-    logger.debug(`req.method ${req.method}`);
+    logger.debug(`Method name: ${req.method}`);
   }
 }
 
@@ -21,4 +23,14 @@ export function handleUnhandledRejection(res) {
   process.on('unhandledRejection', () => {
     logger.error('Unhandled Rejection occured');
   });
+}
+
+export function logControllerErrors(err, req, res, next) {
+  if (Object.keys(req.query).length !== 0) {
+    logger.error(`Method name: ${req.method}, arguments: ${JSON.stringify(req.query)}, error message: ${err.message}`);
+  } else {
+    logger.error(`Method name: ${req.method}, error message: ${err.message}`);
+  }
+
+  next(err);
 }

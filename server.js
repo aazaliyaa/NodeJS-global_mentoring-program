@@ -4,7 +4,9 @@ import usersRouter from './routes/users.route.js';
 import groupsRouter from './routes/groups.route.js';
 import junctionRouter from './routes/junction.route.js';
 import db, { addPredefinedDatatoDB } from './models/index.js';
-import { handleUncaughtException, handleUnhandledRejection, logServiceMethodAndArgs } from './controllers/logger.controller.js';
+import {
+  handleUncaughtException, handleUnhandledRejection, logServiceMethodAndArgs, logControllerErrors,
+} from './controllers/logger.controller.js';
 
 const app = express();
 app.use(json());
@@ -17,6 +19,7 @@ const handleLogs = (req, res, next) => {
   next();
 };
 
+app.use(logControllerErrors);
 app.use(handleLogs);
 
 app.use('/users', usersRouter);
