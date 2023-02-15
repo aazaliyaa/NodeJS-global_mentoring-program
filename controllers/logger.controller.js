@@ -9,6 +9,9 @@ export function logServiceMethodAndArgs(req, res, next) {
   } else {
     logger.debug(`Method name: ${req.method}`);
   }
+  if (req.method === 'POST' || req.method === 'PUT') {
+    logger.debug(`Request body: ${JSON.stringify(req.body)}`);
+  }
   next();
 }
 
@@ -33,6 +36,9 @@ export function logControllerErrors(err, req, res, next) {
     logger.error(`Method name: ${req.method}, arguments: ${JSON.stringify(req.query)}, error message: ${err.message}`);
   } else {
     logger.error(`Method name: ${req.method}, error message: ${err.message}`);
+  }
+  if (req.method === 'POST' || req.method === 'PUT') {
+    logger.error(`Request body: ${JSON.stringify(req.body)}`);
   }
 
   next(err);
