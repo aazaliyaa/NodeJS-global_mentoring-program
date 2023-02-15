@@ -12,15 +12,12 @@ const app = express();
 app.use(json());
 app.use(express.urlencoded({ extended: true }));
 
-const handleLogs = (req, res, next) => {
-  logServiceMethodAndArgs(req, res);
-  handleUncaughtException(res);
-  handleUnhandledRejection(res);
-  next();
-};
-
-app.use(logControllerErrors);
-app.use(handleLogs);
+app.use(
+  handleUncaughtException,
+  handleUnhandledRejection,
+  logServiceMethodAndArgs,
+  logControllerErrors,
+);
 
 app.use('/users', usersRouter);
 app.use('/groups', groupsRouter);

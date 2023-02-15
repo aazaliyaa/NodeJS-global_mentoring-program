@@ -1,7 +1,7 @@
 import process from 'node:process';
 import logger from '../logger.js';
 
-export function logServiceMethodAndArgs(req, res) {
+export function logServiceMethodAndArgs(req, res, next) {
   if (Object.keys(req.query).length !== 0) {
     logger.debug(
       `Method name: ${req.method}, arguments: ${JSON.stringify(req.query)}`,
@@ -9,20 +9,23 @@ export function logServiceMethodAndArgs(req, res) {
   } else {
     logger.debug(`Method name: ${req.method}`);
   }
+  next();
 }
 
-export function handleUncaughtException(res) {
+export function handleUncaughtException(req, res, next) {
   res.status(500);
   process.on('uncaughtException', (err) => {
     logger.error('Uncaught exception: ', err);
   });
+  next();
 }
 
-export function handleUnhandledRejection(res) {
+export function handleUnhandledRejection(req, res, next) {
   res.status(500);
   process.on('unhandledRejection', () => {
     logger.error('Unhandled Rejection occured');
   });
+  next();
 }
 
 export function logControllerErrors(err, req, res, next) {
