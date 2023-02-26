@@ -6,3 +6,5 @@
 {"level":"debug","message":"Method name: GET"}
 {"level":"debug","message":"Method name: GET, arguments: {\"login\":\"ghjytc@fggd.com\",\"password\":\"afsfs5677dfsj\"}"}
 {"level":"debug","message":"Method name: GET"}
+{"level":"debug","message":"Method name: GET, arguments: {\"login\":\"ghjytc@fggd.com\",\"password\":\"afsfs5677dfsj\"}"}
+{"level":"debug","message":"Method name: GET"}

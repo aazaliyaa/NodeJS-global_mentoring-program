@@ -7,13 +7,14 @@ import db, { addPredefinedDatatoDB } from './models/index.js';
 import {
   handleUncaughtException, handleUnhandledRejection, logServiceMethodAndArgs, logControllerErrors,
 } from './controllers/logger.controller.js';
-import { login } from './controllers/users.controller.js';
+import { login, checkAuthorization } from './controllers/authorization.controller.js';
 
 const app = express();
 app.use(json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
+  checkAuthorization,
   handleUncaughtException,
   handleUnhandledRejection,
   logServiceMethodAndArgs,

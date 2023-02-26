@@ -1,5 +1,4 @@
 import Joi from 'joi';
-import jwt from 'jsonwebtoken';
 
 const schema = Joi.object({
   login: Joi.string()
@@ -11,15 +10,6 @@ const schema = Joi.object({
   age: Joi.number().integer().min(4).max(130)
     .required(),
   isDeleted: Joi.boolean().required(),
-});
-
-const loginSchema = Joi.object({
-  login: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required(),
-  password: Joi.string()
-    .pattern(/[a-zA-Z][0-9]|[0-9][a-zA-Z]/)
-    .required(),
 });
 
 const UserService = {
@@ -44,21 +34,6 @@ const UserService = {
     age: user.age,
     isDeleted: true,
   }),
-
-  createJWTToken: (req) => {
-    const { login, password } = req.query;
-
-    const { error } = loginSchema.validate({ login, password }, {
-      abortEarly: false,
-    });
-
-    const payload = { login };
-
-    const token = jwt.sign(payload, 'privateKey', { expiresIn: '1h' });
-
-    if (error) return error;
-    return token;
-  },
 };
 
 export default UserService;
