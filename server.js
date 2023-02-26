@@ -1,5 +1,6 @@
 import { createServer } from 'http';
 import express, { json } from 'express';
+import cors from 'cors';
 import usersRouter from './routes/users.route.js';
 import groupsRouter from './routes/groups.route.js';
 import junctionRouter from './routes/junction.route.js';
@@ -12,6 +13,7 @@ import { login, checkAuthorization } from './controllers/authorization.controlle
 const app = express();
 app.use(json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use(
   checkAuthorization,
