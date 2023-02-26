@@ -7,6 +7,7 @@ import db, { addPredefinedDatatoDB } from './models/index.js';
 import {
   handleUncaughtException, handleUnhandledRejection, logServiceMethodAndArgs, logControllerErrors,
 } from './controllers/logger.controller.js';
+import { login } from './controllers/users.controller.js';
 
 const app = express();
 app.use(json());
@@ -22,6 +23,8 @@ app.use(
 app.use('/users', usersRouter);
 app.use('/groups', groupsRouter);
 app.use('/junction', junctionRouter);
+// LOGIN  http://localhost:3000/login?login=ghjytc@fggd.com&password=afsfs5677dfsj
+app.use('/login', login);
 
 app.use('/', (req, res) => {
   res.send('Application works!');

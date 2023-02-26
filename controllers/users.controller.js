@@ -118,10 +118,12 @@ export function deleteAll(req, res) {
 }
 
 export function login(req, res) {
-  const token = UserService.createJWTToken(req);
-  if (token) {
-    res.status(200).json({ token });
-  } else {
-    res.status(401).json({ message: 'Invalid credentials' });
+  if (req.query.login && req.query.password) {
+    const token = UserService.createJWTToken(req);
+    if (token) {
+      res.status(200).json({ token });
+    } else {
+      res.status(401).json({ message: 'Invalid credentials' });
+    }
   }
 }

@@ -46,13 +46,15 @@ const UserService = {
   }),
 
   createJWTToken: (req) => {
-    const { username, password } = req.body;
+    const { login, password } = req.query;
 
-    const { error } = loginSchema.validate({ username, password }, {
+    const { error } = loginSchema.validate({ login, password }, {
       abortEarly: false,
     });
 
-    const token = jwt.sign(username, 'secret_key', { expiresIn: '1h' });
+    const payload = { login };
+
+    const token = jwt.sign(payload, 'privateKey', { expiresIn: '1h' });
 
     if (error) return error;
     return token;
