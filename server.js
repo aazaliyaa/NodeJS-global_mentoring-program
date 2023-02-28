@@ -4,10 +4,20 @@ import usersRouter from './routes/users.route.js';
 import groupsRouter from './routes/groups.route.js';
 import junctionRouter from './routes/junction.route.js';
 import db, { addPredefinedDatatoDB } from './models/index.js';
+import {
+  handleUncaughtException, handleUnhandledRejection, logServiceMethodAndArgs, logControllerErrors,
+} from './controllers/logger.controller.js';
 
 const app = express();
 app.use(json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  handleUncaughtException,
+  handleUnhandledRejection,
+  logServiceMethodAndArgs,
+  logControllerErrors,
+);
 
 app.use('/users', usersRouter);
 app.use('/groups', groupsRouter);
