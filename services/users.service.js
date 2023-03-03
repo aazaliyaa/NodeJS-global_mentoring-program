@@ -7,13 +7,9 @@ const schema = Joi.object({
   password: Joi.string()
     .pattern(/[a-zA-Z][0-9]|[0-9][a-zA-Z]/)
     .required(),
-  age: Joi.number()
-    .integer()
-    .min(4)
-    .max(130)
+  age: Joi.number().integer().min(4).max(130)
     .required(),
-  isDeleted: Joi.boolean()
-    .required(),
+  isDeleted: Joi.boolean().required(),
 });
 
 const UserService = {
@@ -38,7 +34,6 @@ const UserService = {
     age: user.age,
     isDeleted: true,
   }),
-
 };
 
 export default UserService;
