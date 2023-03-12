@@ -2,8 +2,8 @@ export const HOST = 'localhost';
 export const USER = 'postgres';
 export const PASSWORD = 'Barbaris179$';
 export const DB = 'postgres';
-export const dialect = 'postgres';
-export const pool = {
+export const DIALECT = 'postgres';
+export const POOL = {
   max: 5,
   min: 0,
   acquire: 30000,

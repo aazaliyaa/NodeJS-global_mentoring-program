@@ -1,7 +1,9 @@
 import UserGroupDataAccess from '../dal/junction.dal.js';
 import db from '../models/index.js';
 
-const t = await db.sequelize.transaction();
+const t = async () => {
+  await db.sequelize.transaction();
+};
 
 export function createJunction(req, res) {
   UserGroupDataAccess.createUserGroup(req.body)

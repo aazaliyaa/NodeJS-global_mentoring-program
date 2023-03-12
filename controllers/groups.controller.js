@@ -35,7 +35,7 @@ export function findGroupById(req, res) {
   GroupsDataAccess.findGroupByPk(id)
     .then((data) => {
       if (data) {
-        res.send(data);
+        res.status(200).send(data);
       } else {
         res.status(404).send({
           message: `Cannot find group with id=${id}.`,

@@ -1,21 +1,22 @@
 import Sequelize from 'sequelize';
-import {
-  DB, USER, PASSWORD, HOST, dialect as _dialect, pool as _pool, predefinedUsers, predefinedGroups,
-} from '../config/db.config.js';
+import * as dotenv from 'dotenv';
+import { POOL, predefinedUsers, predefinedGroups } from '../config/db.config.js';
 import usersModel from './users.model.js';
 import groupsModel from './groups.model.js';
 import userGroupModel from './junction.model.js';
 
-const sequelize = new Sequelize(DB, USER, PASSWORD, {
-  host: HOST,
-  dialect: _dialect,
+dotenv.config();
+
+const sequelize = new Sequelize(process.env.DB, process.env.USER, process.env.PASSWORD, {
+  host: process.env.HOST,
+  dialect: process.env.DIALECT,
   operatorsAliases: 0,
 
   pool: {
-    max: _pool.max,
-    min: _pool.min,
-    acquire: _pool.acquire,
-    idle: _pool.idle,
+    max: POOL.max,
+    min: POOL.min,
+    acquire: POOL.acquire,
+    idle: POOL.idle,
   },
 });
 
